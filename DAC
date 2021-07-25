@@ -1,0 +1,415 @@
+I0 0 14 pwl(0 0 100p 0 200p 600u 300p 0)
+I1 0 15 pwl(0 0 200p 0 300p 600u 400p 0)
+I2 0 16 pwl(0 0)
+I3 0 17 pwl(0 0 200p 0 300p 600u 400p 0)
+I4 0 18 pwl(0 0)
+I5 0 19 pwl(0 0 200p 0 300p 600u 400p 0)
+I6 0 20 pwl(0 0)
+X_DCSFQ_0 14 1 dcsfq
+X_DCSFQ_1 15 8 dcsfq
+X_DCSFQ_2 16 9 dcsfq
+X_DCSFQ_3 17 10 dcsfq
+X_DCSFQ_4 18 11 dcsfq
+X_DCSFQ_5 19 12 dcsfq
+X_DCSFQ_6 20 13 dcsfq
+X_NDROT_0 1 7 1 1 ndrot
+X_NDROT_1 8 7 1 6 ndrot
+X_NDROT_2 9 7 2 6 ndrot
+X_NDROT_3 10 7 3 6 ndrot
+X_NDROT_4 11 7 4 6 ndrot
+X_NDROT_5 12 7 5 6 ndrot
+X_NDROT_6 13 7 6 6 ndrot
+X_TFFT_1 1 2 tfft
+X_TFFT_2 2 3 tfft
+X_TFFT_3 3 4 tfft
+X_TFFT_4 4 5 tfft
+X_TFFT_5 5 6 tfft
+X_DFFT 6 1 7 dfft
+
+*BASIC ELEMENT
+.model jjmit jj(rtype=1, vg=2.8mV, cap=0.07pF, r0=160, rn=16, icrit=0.1mA)
+.subckt dcsfq A Q
+I0 0 7 pwl(0 0 5p 275u)
+I1 0 8 pwl(0 0 5p 175u)
+B0 3 4 15 jjmit area=2.25
+B1 5 10 16 jjmit area=2.25
+B2 6 12 17 jjmit area=2.5
+L0 7 4 0.2p
+L1 8 6 0.2p
+L2 A 9 1p
+L3 9 3 0.6p
+L4 4 5 1.1p
+L5 5 6 4.5p
+L6 6 Q 2p
+L7 9 0 3.9p
+L8 14 4 1p
+L9 10 0 0.2p
+L10 11 0 1p
+L11 12 0 0.2p
+L12 13 0 1p
+R0 5 11 3.048846408
+R1 6 13 2.743961767
+R2 3 14 3.048846408
+.ends dcsfq
+
+.subckt jtl A Q
+.param Phi0=2.067833848E-15
+.param B0=1
+.param Ic0=0.0001
+.param IcRs=100u*6.859904418
+.param B0Rs=IcRs/Ic0*B0
+.param Rsheet=2 
+.param Lsheet=1.13e-12 
+.param LP=0.2p
+.param IC=2.5
+.param LB=2p
+.param BiasCoef=0.7
+.param B1=IC
+.param B2=IC
+.param RB1=B0Rs/B1
+.param RB2=B0Rs/B2
+.param LRB1=(RB1/Rsheet)*Lsheet+LP
+.param LRB2=(RB2/Rsheet)*Lsheet+LP
+.param L1=Phi0/(4*IC*Ic0)
+.param L2=Phi0/(4*B1*Ic0)
+.param L3=Phi0/(4*B1*Ic0)
+.param L4=Phi0/(4*B2*Ic0)
+IB1 0 5 pwl(0 0 5p 350u)
+B1 3 7 11 jjmit area=B1
+B2 4 9 12 jjmit area=B2
+L1 A 3 L1
+L2 3 6 L2
+L3 6 4 L3
+L4 4 Q L4
+LB1 5 6 LB
+LP1 7 0 LP
+LP2 9 0 LP
+LRB1 3 8 LRB1
+LRB2 4 10 LRB2
+RB1 8 0 RB1
+RB2 10 0 RB2
+.ends jtl
+
+.subckt ndrot A B CLK Q
+.param Scaling=1.0
+.param B0=1
+.param Ic0=0.0001
+.param IcRs=100u*6.859904418
+.param B0Rs=IcRs/Ic0*B0
+.param Rsheet=2 
+.param Lsheet=1.13e-12 
+.param B01=2.1788399302058328*Scaling
+.param B01rx1=0.8596715235590455*Scaling
+.param B01rx3=0.9892029833667483*Scaling
+.param B01tx1=2.3613474994575965*Scaling
+.param B02=1.6498418078316253*Scaling
+.param B02rx1=1.0002064168816702*Scaling
+.param B02rx3=0.9426302107353123*Scaling
+.param B03=2.346444294038123*Scaling
+.param B04=1.959719668899844*Scaling
+.param B05=2.8367568100690996*Scaling
+.param B06=1.9079333820062683*Scaling
+.param B07=1.774936463415763*Scaling
+.param B08=1.161873602860789*Scaling
+.param B09=0.7782136162931658*Scaling
+.param B10=1.6312905658688257*Scaling
+.param B11=1.5078865547595564*Scaling
+.param IB01=0.00022385147240104272*Scaling
+.param IB01rx1=0.00013414240085083285*Scaling
+.param IB01rx3=0.00013179770453636912*Scaling
+.param IB01tx1=0.00019550907771059744*Scaling
+.param IB02=0.00015219252954919415*Scaling
+.param IB03=0.0001980857825625136*Scaling
+.param IB04=9.851658491710679e-05*Scaling
+.param IB05=9.472815335373098e-05*Scaling
+.param IB06=6.36746817353646e-05*Scaling
+.param L01=7.583253898110444e-12*(1/Scaling-(1-Scaling))
+.param L01rx1=1.9122271431208015e-12*(1/Scaling-(1-Scaling))
+.param L01rx3=1.7868861603532337e-12*(1/Scaling-(1-Scaling))
+.param L01tx1=3.542674238775056e-12*(1/Scaling-(1-Scaling))
+.param L02=1.3381364079735137e-12*(1/Scaling-(1-Scaling))
+.param L02rx1=4.048126383444853e-12*(1/Scaling-(1-Scaling))
+.param L02rx3=4.313533638451465e-12*(1/Scaling-(1-Scaling))
+.param L02tx1=3.5269876551915765e-12*(1/Scaling-(1-Scaling))
+.param L03=4.387868619800262e-12*(1/Scaling-(1-Scaling))
+.param L03rx1=3.6035853045412023e-12*(1/Scaling-(1-Scaling))
+.param L03rx3=3.9259512228634774e-12*(1/Scaling-(1-Scaling))
+.param L04=3.216968283885101e-12*(1/Scaling-(1-Scaling))
+.param L05=7.2182844653910156e-12*(1/Scaling-(1-Scaling))
+.param L06=3.0676981292950732e-12*(1/Scaling-(1-Scaling))
+.param L07=2.5596303355721674e-12*(1/Scaling-(1-Scaling))
+.param L08=3.243894306062451e-12*(1/Scaling-(1-Scaling))
+.param L09=3.7381664270667463e-13*(1/Scaling-(1-Scaling))
+.param L10=5.299363605457756e-13*(1/Scaling-(1-Scaling))
+.param L11=2.5087689323982963e-12*(1/Scaling-(1-Scaling))
+.param L13=9.513656670568208e-13*(1/Scaling-(1-Scaling))
+.param L14=4.752763562613125e-14*(1/Scaling-(1-Scaling))
+.param L15=1.2874701900487265e-12*(1/Scaling-(1-Scaling))
+.param L16=1.0677668196342924e-12*(1/Scaling-(1-Scaling))
+.param L17=1.2791051325983638e-12*(1/Scaling-(1-Scaling))
+.param LRB01=(RB01/Rsheet)*Lsheet
+.param LRB01rx1=(RB01rx1/Rsheet)*Lsheet
+.param LRB01rx3=(RB01rx3/Rsheet)*Lsheet
+.param LRB01tx1=(RB01tx1/Rsheet)*Lsheet
+.param LRB02=(RB02/Rsheet)*Lsheet
+.param LRB02rx1=(RB02rx1/Rsheet)*Lsheet
+.param LRB02rx2=(RB02rx2/Rsheet)*Lsheet
+.param LRB02rx3=(RB02rx3/Rsheet)*Lsheet
+.param LRB03=(RB03/Rsheet)*Lsheet
+.param LRB04=(RB04/Rsheet)*Lsheet
+.param LRB05=(RB05/Rsheet)*Lsheet
+.param LRB06=(RB06/Rsheet)*Lsheet
+.param LRB07=(RB07/Rsheet)*Lsheet
+.param LRB08=(RB08/Rsheet)*Lsheet
+.param LRB09=(RB09/Rsheet)*Lsheet
+.param LRB10=(RB10/Rsheet)*Lsheet
+.param LRB11=(RB11/Rsheet)*Lsheet
+.param RB01=B0Rs/B01
+.param RB01rx1=B0Rs/B01rx1
+.param RB01rx2=B0Rs/B01rx1
+.param RB01rx3=B0Rs/B01rx3
+.param RB01tx1=B0Rs/B01tx1
+.param RB02=B0Rs/B02
+.param RB02rx1=B0Rs/B02rx1
+.param RB02rx2=B0Rs/B02rx1
+.param RB02rx3=B0Rs/B02rx3
+.param RB03=B0Rs/B03
+.param RB04=B0Rs/B04
+.param RB05=B0Rs/B05
+.param RB06=B0Rs/B06
+.param RB07=B0Rs/B07
+.param RB08=B0Rs/B08
+.param RB09=B0Rs/B09
+.param RB10=B0Rs/B10
+.param RB11=B0Rs/B11
+B01 22 66 89 jjmit area=B01
+B01RX1 7 32 76 jjmit area=B01rx1
+B01RX2 13 44 81 jjmit area=B01rx1
+B01RX3 20 62 87 jjmit area=B01rx3
+B01TX1 25 73 92 jjmit area=B01tx1
+B02 18 19 86 jjmit area=B02
+B02RX1 8 34 77 jjmit area=B02rx1
+B02RX2 14 46 82 jjmit area=B02rx1
+B02RX3 21 64 88 jjmit area=B02rx3
+B03 15 48 83 jjmit area=B03
+B04 11 12 80 jjmit area=B04
+B05 12 50 84 jjmit area=B05
+B06 9 36 78 jjmit area=B06
+B07 5 6 75 jjmit area=B07
+B08 6 38 79 jjmit area=B08
+B09 10 16 85 jjmit area=B09
+B10 23 69 90 jjmit area=B10
+B11 24 71 91 jjmit area=B11
+L01 21 22 L01
+L01RX1 A 7 L01rx1
+L01RX2 B 13 L01rx1
+L01RX3 CLK 20 L01rx3
+L01TX1 24 25 L01tx1
+L02 19 58 L02
+L02RX1 7 28 L02rx1
+L02RX2 13 42 L02rx1
+L02RX3 20 57 L02rx3
+L02TX1 25 61 L02tx1
+L03 14 15 L03
+L03RX1 28 8 L03rx1
+L03RX2 42 14 L03rx1
+L03RX3 57 21 L03rx3
+L04 15 11 L04
+L05 8 9 L05
+L06 9 5 L06
+L07 31 10 L07
+L08 12 10 L08
+L09 16 54 L09
+L10 54 58 L10
+L11 23 17 L11
+L13 58 23 L13
+L14 6 31 L14
+L15 22 60 L15
+L16 60 18 L16
+L17 17 24 L17
+LP01 66 0 1.56e-13
+LP01RX1 32 0 3.4e-13
+LP01RX2 44 0 3.4e-13
+LP01RX3 62 0 3.4e-13
+LP01TX1 73 0 5e-14
+LP02RX1 34 0 6e-14
+LP02RX2 46 0 6e-14
+LP02RX3 64 0 6e-14
+LP03 48 0 1.35e-13
+LP05 50 0 1.4599999999999998e-13
+LP06 36 0 1.3300000000000001e-13
+LP08 38 0 2.16e-13
+LP10 69 0 1.4599999999999998e-13
+LP11 71 0 1.35e-13
+LPR01 60 68 1.8199999999999998e-13
+LPR01RX1 26 28 2e-13
+LPR01RX2 40 42 2e-13
+LPR01RX3 53 57 2e-13
+LPR01TX1 55 25 2e-13
+LPR02 41 15 1.53e-13
+LPR03 27 9 1.85e-13
+LPR04 30 31 2.5059999999999996e-12
+LPR05 54 56 3.4e-14
+LRB01 67 0 LRB01
+LRB01RX1 33 0 LRB01rx1
+LRB01RX2 45 0 LRB01rx1
+LRB01RX3 63 0 LRB01rx3
+LRB01TX1 74 0 LRB01tx1
+LRB02 59 19 LRB02
+LRB02RX1 35 0 LRB02rx1
+LRB02RX2 47 0 LRB02rx2
+LRB02RX3 65 0 LRB02rx3
+LRB03 49 0 LRB03
+LRB04 43 12 LRB04
+LRB05 51 0 LRB05
+LRB06 37 0 LRB06
+LRB07 29 6 LRB07
+LRB08 39 0 LRB08
+LRB09 52 16 LRB09
+LRB10 70 0 LRB10
+LRB11 72 0 LRB11
+RB01 22 67 RB01
+RB01RX1 7 33 RB01rx1
+RB01RX2 13 45 RB01rx2
+RB01RX3 20 63 RB01rx3
+RB01TX1 25 74 RB01tx1
+RB02 18 59 RB02
+RB02RX1 8 35 RB02rx1
+RB02RX2 14 47 RB02rx2
+RB02RX3 21 65 RB02rx3
+RB03 15 49 RB03
+RB04 11 43 RB04
+RB05 12 51 RB05
+RB06 9 37 RB06
+RB07 5 29 RB07
+RB08 6 39 RB08
+RB09 10 52 RB09
+RB10 23 70 RB10
+RB11 24 72 RB11
+RINSTX1 61 Q 1.36
+IB01 0 68 pwl(0 0 5p IB01)
+IB01RX1 0 26 pwl(0 0 5p IB01rx1)
+IB01RX2 0 40 pwl(0 0 5p IB01rx1)
+IB01RX3 0 53 pwl(0 0 5p IB01rx3)
+IB01TX1 0 55 pwl(0 0 5p IB01tx1)
+IB02 0 41 pwl(0 0 5p IB02)
+IB03 0 27 pwl(0 0 5p IB03)
+IB04 0 30 pwl(0 0 5p IB04)
+IB05 0 56 pwl(0 0 5p IB05)
+IB06 0 17 pwl(0 0 5p IB06)
+.ends ndrot
+
+.subckt dfft A CLK Q
+IB1 0 22 pwl(0 0 5p 315u)
+IB2 0 21 pwl(0 0 5p 250u)
+IB3 0 14 pwl(0 0 5p 315u)
+IB4 0 23 pwl(0 0 5p 350u)
+B1 10 28 44 jjmit area=2
+B2 11 30 45 jjmit area=2.5
+B3 8 9 43 jjmit area=1.7857
+B4 9 33 46 jjmit area=2.5
+B5 7 34 47 jjmit area=2.5
+B6 4 16 40 jjmit area=2
+B7 5 18 41 jjmit area=2.5
+B8 6 7 42 jjmit area=1.7857
+B9 12 36 48 jjmit area=2.5
+B10 13 38 49 jjmit area=2.5
+L1 A 10 2p
+L2 11 8 4.1357p
+L3 9 7 8.2713p
+L6 CLK 4 2p
+L7 4 15 2.5848p
+L8 15 5 2.5848p
+L9 5 6 4.1357p
+L10 7 12 4.1357p
+L11 12 25 2.0678p
+L12 25 13 2.0678p
+L13 13 27 2p
+LB1 22 24 2p
+LB2 21 9 2p
+LB3 14 15 2p
+LB4 23 25 2p
+LP1 28 0 0.2p
+LP2 30 0 0.2p
+LP4 33 0 0.2p
+LP5 34 0 0.2p
+LP6 16 0 0.2p
+LP7 18 0 0.2p
+LP9 36 0 0.2p
+LP10 38 0 0.2p
+LRB1 29 0 2.1379p
+LRB2 31 0 1.7503p
+LRB3 26 9 2.3705p
+LRB4 9 32 1.7503p
+LRB5 7 35 1.7503
+LRB6 17 0 2.1379p
+LRB7 19 0 1.7503p
+LRB8 20 7 2.3705p
+LRB9 12 37 1.7503p
+LRB10 13 39 1.7503p
+LSET2 10 24 2.5848p
+LSET3 24 11 2.5848p
+RB1 10 29 3.43
+RB2 11 31 2.744
+RB3 8 26 3.8415
+RB4 32 0 2.744
+RB5 35 0 2.744
+RB6 4 17 3.43
+RB7 5 19 2.744
+RB8 6 20 3.8415
+RB9 37 0 2.744
+RB10 39 0 2.744
+RD 27 Q 1.36
+.ends dfft
+
+.subckt tfft A Q
+IB1 0 22 pwl(0 0 5p 315u)
+IB2 0 21 pwl(0 0 5p 250u)
+IB4 0 23 pwl(0 0 5p 350u)
+B1 7 19 33 jjmit area=2
+B2 8 21 34 jjmit area=2.5
+B3 4 6 32 jjmit area=1.7857
+B4 6 24 35 jjmit area=2.5
+B5 5 25 36 jjmit area=2.5
+B8 4 5 31 jjmit area=1.7857
+B9 9 27 37 jjmit area=2.5
+B10 10 29 38 jjmit area=2.5
+L1 A 7 2p
+L2 8 4 4.1357p
+L3 6 5 8.2713p
+L10 5 9 4.1357p
+L11 9 16 2.0678p
+L12 16 10 2.0678p
+L13 10 18 2p
+LB1 13 15 2p
+LB2 12 6 2p
+LB4 14 16 2p
+LP1 19 0 0.2p
+LP2 21 0 0.2p
+LP4 24 0 0.2p
+LP5 25 0 0.2p
+LP9 27 0 0.2p
+LP10 29 0 0.2p
+LRB1 20 0 2.1379p
+LRB2 22 0 1.7503p
+LRB3 17 6 2.3705p
+LRB4 6 23 1.7503p
+LRB5 5 26 1.7503
+LRB8 11 5 2.3705p
+LRB9 9 28 1.7503p
+LRB10 10 30 1.7503p
+LSET2 7 15 2.5848p
+LSET3 15 8 2.5848p
+RB1 7 20 3.43
+RB2 8 22 2.744
+RB3 4 17 3.8415
+RB4 23 0 2.744
+RB5 26 0 2.744
+RB8 4 11 3.8415
+RB9 28 0 2.744
+RB10 30 0 2.744
+RD 18 Q 1.36
+.ends tfft
+
+.tran 0.25p 1200p 0 0 0.25p
+.print NODEV 6
